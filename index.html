@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Rakshabandhan!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            transition: background 0.5s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background Themes */
+        .teddy-bg {
+            background: url('https://i.pinimg.com/originals/3a/1e/88/3a1e88a9e6a4b6c8a0b6e8a3f3e3e3e3.jpg') no-repeat center center;
+            background-size: cover;
+        }
+
+        .hearts-bg {
+            background: #ffebee;
+        }
+
+        .flowers-bg {
+            background: url('https://i.pinimg.com/originals/8f/5d/9e/8f5d9e6e3e3e3e3e3e3e3e3e3e3e3e3.jpg') no-repeat center center;
+            background-size: cover;
+        }
+
+        /* Hearts animation */
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        /* Message Box */
+        .message-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 80%;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            color: #d81b60;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: #d81b60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background-color: #c2185b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-option {
+            position: relative;
+        }
+
+        /* Hidden class for transitions */
+        .hidden {
+            display: none;
+        }
+
+        /* Flower animation for final screen */
+        .flower {
+            position: absolute;
+            pointer-events: none;
+            animation: float 8s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="teddy-bg">
+    <!-- Screen 1: Initial Greeting -->
+    <div class="message-box" id="screen1">
+        <h1>Happy Rakshabandhan My Siso!</h1>
+        <button class="btn" id="nextBtn1">Next</button>
+    </div>
+
+    <!-- Screen 2: Gift Question -->
+    <div class="message-box hidden" id="screen2">
+        <h1>Did you want the gift?</h1>
+        <button class="btn btn-option" id="yesBtn">Yes</button>
+        <button class="btn btn-option" id="noBtn">No</button>
+    </div>
+
+    <!-- Screen 3: Sweet Sister Message -->
+    <div class="message-box hidden" id="screen3">
+        <h1>I knew you are my sweetest sister!</h1>
+        <button class="btn" id="nextBtn2">Next</button>
+    </div>
+
+    <!-- Screen 4: Final Thank You -->
+    <div class="message-box hidden" id="screen4">
+        <h1>Thank you for always being with me!</h1>
+        <h2>Happy Rakshabandhan Behena!</h2>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const screen1 = document.getElementById('screen1');
+            const screen2 = document.getElementById('screen2');
+            const screen3 = document.getElementById('screen3');
+            const screen4 = document.getElementById('screen4');
+            const nextBtn1 = document.getElementById('nextBtn1');
+            const nextBtn2 = document.getElementById('nextBtn2');
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const body = document.body;
+
+            // Next button from screen 1
+            nextBtn1.addEventListener('click', function() {
+                screen1.classList.add('hidden');
+                screen2.classList.remove('hidden');
+                body.classList.remove('teddy-bg');
+                body.classList.add('hearts-bg');
+                
+                // Create floating hearts
+                createHearts();
+            });
+
+            // Yes button (moves when clicked)
+            yesBtn.addEventListener('click', function() {
+                // Random position within viewport
+                const maxX = window.innerWidth - yesBtn.offsetWidth;
+                const maxY = window.innerHeight - yesBtn.offsetHeight;
+                
+                const randomX = Math.floor(Math.random() * maxX);
+                const randomY = Math.floor(Math.random() * maxY);
+                
+                yesBtn.style.position = 'absolute';
+                yesBtn.style.left = randomX + 'px';
+                yesBtn.style.top = randomY + 'px';
+            });
+
+            // No button
+            noBtn.addEventListener('click', function() {
+                screen2.classList.add('hidden');
+                screen3.classList.remove('hidden');
+            });
+
+            // Next button from screen 3
+            nextBtn2.addEventListener('click', function() {
+                screen3.classList.add('hidden');
+                screen4.classList.remove('hidden');
+                body.classList.remove('hearts-bg');
+                body.classList.add('flowers-bg');
+                
+                // Remove all hearts
+                document.querySelectorAll('.heart').forEach(heart => {
+                    heart.remove();
+                });
+                
+                // Create floating flowers
+                createFlowers();
+            });
+
+            // Function to create floating hearts
+            function createHearts() {
+                const colors = ['#ff7675', '#fd79a8', '#e84393', '#fab1a0', '#ff9ff3'];
+                
+                for (let i = 0; i < 20; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    heart.innerHTML = '❤';
+                    heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                    heart.style.left = Math.random() * window.innerWidth + 'px';
+                    heart.style.top = Math.random() * window.innerHeight + 'px';
+                    heart.style.animationDuration = (Math.random() * 5 + 3) + 's';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(heart);
+                }
+            }
+
+            // Function to create floating flowers
+            function createFlowers() {
+                const flowers = ['🌸', '🌺', '🌻', '🌼', '🌷', '💐', '🏵️'];
+                
+                for (let i = 0; i < 15; i++) {
+                    const flower = document.createElement('div');
+                    flower.classList.add('flower');
+                    flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+                    flower.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                    flower.style.left = Math.random() * window.innerWidth + 'px';
+                    flower.style.top = Math.random() * window.innerHeight + 'px';
+                    flower.style.animationDuration = (Math.random() * 8 + 5) + 's';
+                    flower.style.animationDelay = Math.random() * 3 + 's';
+                    document.body.appendChild(flower);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
